@@ -1,4 +1,4 @@
-import { TaskRunner, TaskDecorator } from "runner.ts";
+import { TaskRunner, TaskDecorator } from "./runner.ts";
 
 const globalRunner = new TaskRunner();
 

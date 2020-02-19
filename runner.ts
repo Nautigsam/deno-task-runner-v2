@@ -1,10 +1,8 @@
-import { ProcessStatus, Closer, Process } from "deno";
-import * as deno from "deno";
 import {
   watch,
   Options as WatchOptions
 } from "https://deno.land/x/watch@1.2.0/mod.ts";
-import * as path from "https://deno.land/x/fs/path.ts"; // should fix later
+import * as path from "https://deno.land/std/path/mod.ts"; // should fix later
 
 type Tasks = { [name: string]: Command };
 interface ResolveContext {
@@ -15,7 +13,7 @@ class ProcessError extends Error {
   constructor(
     public pid: number,
     public rid: number,
-    public status: ProcessStatus,
+    public status: Deno.ProcessStatus,
     public taskName?: string
   ) {
     super("Process exited with status code " + status.code);
@@ -34,7 +32,7 @@ class Single implements Command {
     const allArgs = shell
       ? [...getShellCommand(), [this.script, ...args].join(" ")]
       : [...this.script.split(/\s/), ...args];
-    const p = deno.run({
+    const p = Deno.run({
       args: allArgs,
       cwd: cwd,
       stdout: "inherit",
@@ -56,16 +54,16 @@ class Single implements Command {
 }
 
 function getShellCommand(): string[] {
-  let env = deno.env();
-  if (deno.platform.os === "win") {
-    return [env.COMSPEC || "cmd.exe", "/D", "/C"];
-  } else {
-    return [env.SHELL || "/bin/sh", "-c"];
-  }
+  let env = Deno.env();
+  if (env.OS === "Windows_NT") {
+     return [env.COMSPEC || "cmd.exe", "/D", "/C"];
+   } else {
+     return [env.SHELL || "/bin/sh", "-c"];
+   }
 }
 
-async function kill(p: Process) {
-  const k = deno.run({
+async function kill(p: Deno.Process) {
+  const k = Deno.run({
     args: ["kill", `${p.pid}`],
     stdout: "inherit",
     stderr: "inherit"
@@ -164,13 +162,14 @@ class SyncWatcher implements Command {
       return path.join(context.cwd, d);
     });
     const childResources = new Set();
-    await this.command
-      .run(args, { ...context, resources: childResources })
+    //@ts-ignore
+    await this.command.run(args, { ...context, resources: childResources })
       .catch(_ => {});
     for await (const _ of watch(dirs_, this.watchOptions)) {
+      //@ts-ignore
       closeResouces(childResources);
-      await this.command
-        .run(args, { ...context, resources: childResources })
+      //@ts-ignore
+      await this.command.run(args, { ...context, resources: childResources })
         .catch(_ => {});
     }
   }
@@ -202,20 +201,21 @@ class AsyncWatcher implements Command {
       }
     };
     context.resources.add(closer);
-    this.command
-      .run(args, { ...context, resources: childResources })
+    //@ts-ignore
+    this.command.run(args, { ...context, resources: childResources })
       .catch(_ => {});
     for await (const _ of watch(dirs_, this.watchOptions)) {
+      //@ts-ignore
       closeResouces(childResources);
-      this.command
-        .run(args, { ...context, resources: childResources })
+      //@ts-ignore
+      this.command.run(args, { ...context, resources: childResources })
         .catch(_ => {});
     }
     context.resources.delete(closer);
   }
 }
 
-function closeResouces(resources: Set<Closer>) {
+function closeResouces(resources: Set<Deno.Closer>) {
   for (let resource of resources) {
     resource.close();
   }
@@ -252,7 +252,7 @@ interface RunOptions {
 interface RunContext {
   cwd: string;
   shell: boolean;
-  resources: Set<Closer>;
+  resources: Set<Deno.Closer>;
 }
 export class TaskRunner {
   tasks: Tasks = {};
@@ -278,7 +278,9 @@ export class TaskRunner {
       shell: options.shell,
       resources: new Set()
     };
+    //@ts-ignore
     const resolvedCommand = command.resolveRef(this.tasks, resolveContext);
+    //@ts-ignore
     await resolvedCommand.run(args, context);
   }
 }

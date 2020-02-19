@@ -1,5 +1,3 @@
-import { args, exit } from "deno";
-import * as flags from "https://deno.land/x/flags@v0.2.5/index.ts";
 import { TaskRunner, TaskDecorator } from "runner.ts";
 
 const globalRunner = new TaskRunner();
@@ -37,7 +35,15 @@ export function task(
 
 new Promise(resolve => setTimeout(resolve, 0))
   .then(async () => {
-    const parsedArgs = flags.parse(args);
+    // Make the args var be like the previous format, which was a key value pair
+    let parsedArgs: { [key: string]: any } = {}
+    for (let i = 0; i < Deno.args.length; i = i + 2) {
+      let tmpArg = Deno.args[i]
+      tmpArg
+        .replace('-', '')
+        .replace('--', '')
+      parsedArgs[tmpArg] = Deno.args[i + 1]
+    }
     const cwd = parsedArgs.cwd || ".";
     const taskName = parsedArgs._[1];
     const taskArgs = parsedArgs._.splice(2);
@@ -48,5 +54,5 @@ new Promise(resolve => setTimeout(resolve, 0))
   })
   .catch(e => {
     console.error(e);
-    exit(1);
+    Deno.exit(1);
   });

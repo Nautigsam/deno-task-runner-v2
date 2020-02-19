@@ -1,9 +1,8 @@
-import { readFile } from "deno";
-import { test } from "https://deno.land/x/testing@v0.2.5/mod.ts";
-import { assertEqual } from "https://deno.land/x/pretty_assert@0.1.4/mod.ts";
+const { readFile } = Deno;
+import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import { TaskRunner } from "../runner.ts";
 
-test(async function basics() {
+Deno.test(async function basics() {
   const bytes = await readFile("tmp/result");
   const result = new TextDecoder()
     .decode(bytes)
@@ -26,10 +25,10 @@ end
 `
     .replace(/\r\n/g, "\n")
     .trim();
-  assertEqual(result, expectation);
+  assertEquals(result, expectation);
 });
 
-test(async function shell() {
+Deno.test(async function shell() {
   const bytes = await readFile("tmp/result-from-shell");
   const result = new TextDecoder()
     .decode(bytes)
@@ -42,10 +41,10 @@ world
 `
     .replace(/\r\n/g, "\n")
     .trim();
-  assertEqual(result, expectation);
+  assertEquals(result, expectation);
 });
 
-test(async function errors() {
+Deno.test(async function errors() {
   await throws(async () => {
     const runner = new TaskRunner();
     runner.task("foo");

@@ -1,5 +1,5 @@
-import { args } from "deno";
-const name = args[1];
+const { args } = Deno;
+const username = args[1];
 const seconds = args.slice(2);
 if (!seconds.length) {
   seconds[0] = "1";
@@ -12,7 +12,7 @@ if (!seconds.length) {
     i++;
     s = +seconds[0];
     if (s === i) {
-      console.log(name);
+      console.log(username);
       seconds.shift();
     }
     if (i > 10) {

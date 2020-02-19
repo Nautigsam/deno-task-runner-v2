@@ -1,3 +1,3 @@
-import { exit } from "deno";
+const { exit } = Deno;
 console.error("😛");
 exit(1);

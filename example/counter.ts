@@ -1,4 +1,4 @@
-import { args } from "deno";
+const { args } = Deno
 const name = args[1] || "";
 let i = 0;
 const interval = setInterval(() => {

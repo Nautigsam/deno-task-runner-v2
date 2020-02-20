@@ -36,17 +36,13 @@ export function task(
 new Promise(resolve => setTimeout(resolve, 0))
   .then(async () => {
     // Make the args var be like the previous format, which was a key value pair
-    let parsedArgs: { [key: string]: any } = {}
-    for (let i = 0; i < Deno.args.length; i = i + 2) {
-      let tmpArg = Deno.args[i]
-      tmpArg
-        .replace('-', '')
-        .replace('--', '')
-      parsedArgs[tmpArg] = Deno.args[i + 1]
+    let parsedArgs: string[] = []
+    for (let i = 1; i < Deno.args.length; i++) {
+      parsedArgs.push(Deno.args[i])
     }
-    const cwd = parsedArgs.cwd || ".";
-    const taskName = parsedArgs._[1];
-    const taskArgs = parsedArgs._.splice(2);
+    const cwd = ".";
+    const taskName = Deno.args[0];
+    const taskArgs = parsedArgs;
     if (!taskName) {
       throw new Error("Usage: task_file.ts task_name [--cwd]");
     }

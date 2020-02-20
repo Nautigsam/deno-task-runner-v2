@@ -1,4 +1,4 @@
-# deno-task-runner
+# deno-task-runner-v2
 
 [![Build Status](https://travis-ci.org/jinjor/deno-task-runner.svg?branch=master)](https://travis-ci.org/jinjor/deno-task-runner)
 [![Build status](https://ci.appveyor.com/api/projects/status/6kbm7dxgsk7x6wl0?svg=true)](https://ci.appveyor.com/project/jinjor/deno-task-runner)
@@ -10,7 +10,7 @@ Write tasks in deno.
 ## Example
 
 ```typescript
-import { task } from "https://deno.land/x/task_runner/mod.ts";
+import { task } from "https://deno.land/x/task_runner_v2/mod.ts";
 
 task("prepare", "echo preparing...");
 task("counter", "deno counter.ts");

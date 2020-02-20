@@ -14,28 +14,30 @@ Write tasks in deno.
 import { task } from "https://deno.land/x/task_runner_v2/mod.ts";
 
 task("prepare", "echo preparing...");
-task("counter", "deno counter.ts");
-task("all", "$prepare", ["$counter alice", "$counter bob"], "$thumb");
-//          ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^
-//          1st task    2nd task (parallel)                 3rd task
+//    ^^^^^^^    ^^^^^^^^^^^^^^^^^
+//   task name     task command
+task("server", "deno --allow-net ... app.ts");
+task("all", "$prepare", "$server");
+//          ^^^^^^^^^^  ^^^^^^^^
+//          1st task    2nd task
 ```
 
 ```
 $ deno --allow-run --allow-env example.ts all
 preparing...
-bob 1
-alice 1
-alice 2
-bob 2
-alice 3
-bob 3
-alice 4
-bob 4
-bob 5
-alice 5
+
+Deno server started at localhost:1337.
+
+^C
+
+$ deno --allow-run --allow-env example.ts prepare
+preparing...
+
+$
 ```
 
 ## Watch
+**Watching is currently under investigation to get working - the documentation is wrong and will not work**
 
 ```typescript
 task("compile", "echo changed", "$all").watchSync("src");

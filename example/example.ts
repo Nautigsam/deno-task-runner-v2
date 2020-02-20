@@ -1,9 +1,8 @@
 import { task } from "../mod.ts";
 
 task("prepare", "echo preparing...");
-task("counter", "deno counter.ts");
-task("thumb", "deno https://deno.land/thumb.ts");
-task("all", "$prepare", ["$counter alice", "$counter bob"], "$thumb");
+task("counter", "deno ./example/counter.ts");
+task("all", "$prepare", ["$counter alice", "$counter bob"]);
 task("start", "echo changed", "$all").watchSync(".");
 
 task("server", "deno server.ts");

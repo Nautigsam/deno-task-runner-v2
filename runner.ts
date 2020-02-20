@@ -1,7 +1,7 @@
 import {
   watch,
   Options as WatchOptions
-} from "https://deno.land/x/watch_v2@1.2.0/mod.ts";
+} from "https://deno.land/x/watch_v2/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts"; // should fix later
 
 type Tasks = { [name: string]: Command };

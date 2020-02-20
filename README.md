@@ -10,18 +10,18 @@ Write tasks in deno.
 ## Example
 
 ```typescript
+// example.ts
 import { task } from "https://deno.land/x/task_runner_v2/mod.ts";
 
 task("prepare", "echo preparing...");
 task("counter", "deno counter.ts");
-task("thumb", "deno https://deno.land/thumb.ts");
 task("all", "$prepare", ["$counter alice", "$counter bob"], "$thumb");
 //          ^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^
 //          1st task    2nd task (parallel)                 3rd task
 ```
 
 ```
-$ deno example.ts all --allow-run
+$ deno --allow-run --allow-env example.ts all
 preparing...
 bob 1
 alice 1
@@ -33,7 +33,6 @@ alice 4
 bob 4
 bob 5
 alice 5
-👍
 ```
 
 ## Watch

@@ -1,6 +1,5 @@
-const { args } = Deno;
-const username = args[1];
-const seconds = args.slice(2);
+const username = Deno.args[1];
+const seconds = Deno.args.slice(2);
 if (!seconds.length) {
   seconds[0] = "1";
 }

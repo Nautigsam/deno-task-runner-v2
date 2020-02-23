@@ -63,11 +63,20 @@ function getShellCommand(): string[] {
 }
 
 async function kill(p: Deno.Process) {
-  const k = Deno.run({
-    args: ["kill", `${p.pid}`],
-    stdout: "inherit",
-    stderr: "inherit"
-  });
+  let k
+  if (Deno.env().OS === "Windows_NT") {
+    k = Deno.run({
+      args: ["taskkill", "/F", "/PID", `${p.pid}`],
+      stdout: "inherit",
+      stderr: "inherit"
+    });
+  } else {
+    k = Deno.run({
+      args: ["kill", `${p.pid}`],
+      stdout: "inherit",
+      stderr: "inherit"
+    });
+  }
   await k.status();
   k.close();
 }

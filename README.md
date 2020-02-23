@@ -5,6 +5,8 @@
 
 **I have done none of the work for this project. It was created and developed here: https://github.com/jinjor/deno-task-runner. I only fixed a few issues**
 
+**I am no longer going to work on this project or work on `deno-watch-v2` as it feels impossible to fix the existing problems. And I believe `denon` or scripts with `Deno.run(...)` hit all the functionality this module does. At this time, `watch` does not work but `watchSync` does.**
+
 Write tasks in deno.
 
 # Examples
@@ -81,7 +83,7 @@ task("server", "deno test-server.ts");
 task("start", "echo restarting...", "$server").watch("."); // re runs the `start` task upon a change
 ```
 
-**Note: specifying `.` as the area to watch does not work, and also errors when a file changes and the task restarts**
+**Note: Depending on how https://deno.land is retreving the repo, you may get an error on Windows saying "... cannot get the path specified", this is due to specifying `.`. This has been fixed but then displayed another error where the previous process isn't killed properly, resulting in a new process added after every change without any being killed**
 
 Run the server and watch:
 
@@ -120,7 +122,7 @@ task("all", ["$counter alice", "$counter bob"]);
 task("start", "echo changed", "$all").watchSync("."); // re runs the `start` task upon a change
 ```
 
-**Note: all the tasks are finished, this is when the watchSync starts watching which errors**
+**Note: Once all the tasks are finished, this is when the watchSync starts watching which errors**
 
 Run your task and watch:
 

@@ -1,11 +1,10 @@
 # deno-task-runner-v2
 
-[![Build Status](https://travis-ci.org/jinjor/deno-task-runner.svg?branch=master)](https://travis-ci.org/jinjor/deno-task-runner)
-[![Build status](https://ci.appveyor.com/api/projects/status/6kbm7dxgsk7x6wl0?svg=true)](https://ci.appveyor.com/project/jinjor/deno-task-runner)
-
 **I have done none of the work for this project. It was created and developed here: https://github.com/jinjor/deno-task-runner. I only fixed a few issues**
 
 **I am no longer going to work on this project or work on `deno-watch-v2` as it feels impossible to fix the existing problems. And I believe `denon` or scripts with `Deno.run(...)` hit all the functionality this module does. At this time, `watch` does not work but `watchSync` does.**
+
+**I will however be keeping an eye on pull requests should anyone wish to fix the existing issues**
 
 Write tasks in deno.
 

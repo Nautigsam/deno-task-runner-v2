@@ -1,7 +1,7 @@
 import {
   watch,
   Options as WatchOptions
-} from "https://deno.land/x/watch_v2/mod.ts";
+} from "https://deno.land/x/watch_v2@develop/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts"; // should fix later
 
 type Tasks = { [name: string]: Command };
@@ -173,13 +173,13 @@ class SyncWatcher implements Command {
     const childResources = new Set();
     //@ts-ignore
     await this.command.run(args, { ...context, resources: childResources })
-      .catch(_ => {});
+      .catch((err: Error) => {});
     for await (const _ of watch(dirs_, this.watchOptions)) {
       //@ts-ignore
       closeResouces(childResources);
       //@ts-ignore
       await this.command.run(args, { ...context, resources: childResources })
-        .catch(_ => {});
+        .catch((err: Error) => {});
     }
   }
 }
@@ -212,13 +212,13 @@ class AsyncWatcher implements Command {
     context.resources.add(closer);
     //@ts-ignore
     this.command.run(args, { ...context, resources: childResources })
-      .catch(_ => {});
+      .catch((err: Error) => {});
     for await (const _ of watch(dirs_, this.watchOptions)) {
       //@ts-ignore
       closeResouces(childResources);
       //@ts-ignore
       this.command.run(args, { ...context, resources: childResources })
-        .catch(_ => {});
+        .catch((err: Error) => {});
     }
     context.resources.delete(closer);
   }
